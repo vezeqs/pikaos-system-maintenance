@@ -126,7 +126,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" debian:sid \
   bash /repo/pikaos-system-maintenance.sh --dry-run
 ```
 
-`make container-test` runs the container/mock test (needs podman).
+`make container-test` runs the container/mock test (needs podman); CI runs it
+in `.github/workflows/container-tests.yml`.
 
 ## Limits
 
