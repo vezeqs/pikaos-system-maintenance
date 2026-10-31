@@ -18,3 +18,4 @@ test:
 
 container-test:
 	bash tests/pikaos_base.sh
+	bash tests/preview_failure.sh

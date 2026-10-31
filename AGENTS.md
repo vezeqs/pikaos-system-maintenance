@@ -52,6 +52,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" debian:sid \
 - The repo/keyring checks were also run against the PikaOS base container,
   where they pass. A plain Debian Sid container still warns, which is expected.
 
+- A failed `flatpak remote-ls --updates` must be reported, not turned into zero. `tests/preview_failure.sh` pins it.
+
 ## Definition of done
 
 - [ ] `make check` passes.

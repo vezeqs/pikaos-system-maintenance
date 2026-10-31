@@ -17,7 +17,7 @@ make: *** No rule to make target 'check'.  Stop.
 History read: `4f68454` initial release. Pull requests: none. There is no
 `origin` remote, so `gh pr list` has nothing to read.
 
-Findings: 6 (5 fixed, 1 not a bug).
+Findings: 7 (6 fixed, 1 not a bug).
 
 ## F1 — PikaOS reports ID=pika, the script demanded pikaos (High)
 
@@ -69,6 +69,15 @@ checks it. Both were wrong.
 
 **Fix:** added "Verify it yourself" and "Limits".
 **Status:** fixed, test `tests/docs.sh`.
+
+## F7 — A failed Flatpak check is reported as zero (Medium)
+
+**Claim:** the preview shows how many Flatpak apps would be updated.
+**Evidence:** with a mock `flatpak` whose `remote-ls --updates` exits 1, the
+script printed "Flatpak apps to update: 0".
+**Cause:** `flatpak_updates=$(... || true)` discarded the exit status.
+**Fix:** check the status and warn when the check fails.
+**Status:** fixed, test `tests/preview_failure.sh`.
 
 ## Post-audit verification
 

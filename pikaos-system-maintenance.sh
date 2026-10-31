@@ -133,8 +133,14 @@ else
   fi
 
   if command -v flatpak >/dev/null 2>&1; then
-    flatpak_updates=$(flatpak remote-ls --updates --columns=application 2>/dev/null | grep -c . || true)
-    info "==> Flatpak apps to update: ${PURPLE}${flatpak_updates}${NC}"
+    rc=0
+    flatpak_list=$(flatpak remote-ls --updates --columns=application 2>/dev/null) || rc=$?
+    if (( rc == 0 )); then
+      flatpak_updates=$(grep -c . <<<"$flatpak_list" || true)
+      info "==> Flatpak apps to update: ${PURPLE}${flatpak_updates}${NC}"
+    else
+      warn "==> Could not check Flatpak updates (flatpak exit $rc)"
+    fi
   fi
 fi
 
