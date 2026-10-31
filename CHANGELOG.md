@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   PikaOS package list, so the check warned on every real run. It now checks the
   file, with the package as a fallback.
 - `dpkg --configure -a` now gets `--force-confdef --force-confold`, matching the
-  apt calls, so a half-configured package cannot prompt in `--yes` mode.
+  apt calls. This is hardening: conffile prompts happen at unpack, not at
+  configure, so it was not a reproduced bug.
 
 ### Added
 - `Makefile`, `tests/` and a GitHub Actions check workflow.

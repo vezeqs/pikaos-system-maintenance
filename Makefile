@@ -15,3 +15,6 @@ test:
 	bash tests/identity.sh
 	bash tests/docs.sh
 	bash tests/assets.sh
+
+container-test:
+	bash tests/pikaos_base.sh

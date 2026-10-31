@@ -17,7 +17,7 @@ make: *** No rule to make target 'check'.  Stop.
 History read: `4f68454` initial release. Pull requests: none. There is no
 `origin` remote, so `gh pr list` has nothing to read.
 
-Findings: 6 (6 fixed, 1 of them not reproduced).
+Findings: 6 (5 fixed, 1 not a bug).
 
 ## F1 — PikaOS reports ID=pika, the script demanded pikaos (High)
 
@@ -42,14 +42,15 @@ DistroWatch PikaOS package list contains no `pika-keyring` package.
 `tests/identity.sh` pins the path.
 **Status:** fixed, test `tests/identity.sh`.
 
-## F3 — dpkg configure can prompt in --yes mode (Medium, suspected)
+## F3 — dpkg configure and conffile prompts (Not a bug)
 
 **Evidence:** `apt-get` calls pass `--force-confdef --force-confold`, but
-`dpkg --configure -a` did not. dpkg's conffile prompt is not debconf, so
-`DEBIAN_FRONTEND=noninteractive` does not suppress it.
-**Status:** suspected. A half-configured package with a modified conffile was
-not built as a fixture. Fixed defensively by passing the same two flags to
-dpkg; not runtime-reproduced.
+`dpkg --configure -a` did not. That looked like a prompt risk.
+**Investigation:** conffile prompts happen during `dpkg --unpack`, not during
+`--configure`. `--configure` runs maintainer scripts, and
+`DEBIAN_FRONTEND=noninteractive` covers debconf. No reproduction was found.
+**Status:** not a bug. The two flags were kept on `dpkg --configure -a` because
+they match the apt calls and are harmless, but they are hardening, not a fix.
 
 ## F4 — No tests, CI or Makefile (Medium)
 

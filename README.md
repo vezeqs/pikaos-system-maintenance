@@ -119,10 +119,14 @@ make check
 PikaOS identity/keyring regression test and the asset check. The screenshots
 come from a real `debian:sid` container:
 
+`tests/assets.sh` also verifies `assets/source.sha256`: if the script changes without regenerating the screenshots, `make check` fails.
+
 ```bash
 podman run --rm -v "$PWD:/repo:ro,Z" debian:sid \
   bash /repo/pikaos-system-maintenance.sh --dry-run
 ```
+
+`make container-test` runs the container/mock test (needs podman).
 
 ## Limits
 
