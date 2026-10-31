@@ -10,7 +10,7 @@ esac
 exit 0
 MOCK
 chmod +x "$mock/flatpak"
-out=$(printf 'n\n' | script -qec "podman run --rm -it -v $repo:/repo:ro,Z -v $mock:/mock:ro,Z debian:sid bash -c 'PATH=/mock:\$PATH bash /repo/pikaos-system-maintenance.sh'" /dev/null 2>&1)
+out=$(podman run --rm -v $repo:/repo:ro,Z -v $mock:/mock:ro,Z debian:sid bash -c 'PATH=/mock:$PATH bash /repo/pikaos-system-maintenance.sh -y' 2>&1)
 grep -q 'Could not check Flatpak updates' <<<"$out"
 if grep -q 'Flatpak apps to update: .*0' <<<"$out"; then echo "failed Flatpak preview reported as zero" >&2; exit 1; fi
 echo "ok Flatpak preview failure is reported"
