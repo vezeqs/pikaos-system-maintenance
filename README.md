@@ -101,6 +101,7 @@ A real run against a `debian:sid` container, 7 packages behind:
 | Image | Result |
 |-------|--------|
 | `debian:sid` (the PikaOS base), 7 packages | Upgrade, autoremove and cache clean completed; no reboot required |
+| PikaOS base container (`ghcr.io/pikaos-linux/pika-base-debian-container`) | real `ppa.pika-os.com` source and keyring: both checks pass; `ID=pika` produces no warning |
 
 The screenshot is from a plain Debian Sid container, not a PikaOS ISO. That is
 why it shows the "no pika-os.com entry" and "PikaOS keyring is missing"
@@ -128,7 +129,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" debian:sid \
 - It does not roll back. Take a snapshot first if you need one.
 - It does not switch kernels or schedulers; that is Pika Kernel Manager.
 - It does not replace Pikman, the graphical update manager.
-- It was tested on Debian Sid, the PikaOS base, not on a PikaOS ISO.
+- It was tested on Debian Sid and the PikaOS base container, not on a PikaOS
+  ISO. The base container has the real PikaOS source and keyring.
 
 ## License
 

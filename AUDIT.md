@@ -68,3 +68,13 @@ checks it. Both were wrong.
 
 **Fix:** added "Verify it yourself" and "Limits".
 **Status:** fixed, test `tests/docs.sh`.
+
+## Post-audit verification
+
+- Ran against `ghcr.io/pikaos-linux/pika-base-debian-container` with the real
+  `ppa.pika-os.com` source and `/etc/apt/keyrings/pika-keyring.gpg.key`: both
+  checks print OK.
+- With a mounted `ID=pika` os-release, the identity warning is gone. With the
+  container's own `ID=debian`, the warning is expected.
+- A real `apt-get update` against the PikaOS repositories completed and the
+  preview reported 1372 packages; the run was aborted at the prompt.

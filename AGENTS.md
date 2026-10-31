@@ -49,8 +49,8 @@ podman run --rm -v "$PWD:/repo:ro,Z" debian:sid \
   says so; do not quietly drop `--purge`.
 - `dpkg --configure -a` can prompt for a conffile without
   `--force-confdef --force-confold`, which would hang `--yes`.
-- The test container is Debian Sid, the PikaOS base. The PikaOS repo and keyring
-  warnings are expected there and are not a test failure.
+- The repo/keyring checks were also run against the PikaOS base container,
+  where they pass. A plain Debian Sid container still warns, which is expected.
 
 ## Definition of done
 
