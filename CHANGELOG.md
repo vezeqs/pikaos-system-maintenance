@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-10-30
+
+### Fixed
+- PikaOS reports `ID=pika`; the script only accepted `pikaos`, so it warned on
+  every real PikaOS run. It now accepts both.
+- The keyring check looked for a `pika-keyring` package. PikaOS installs
+  `/etc/apt/keyrings/pika-keyring.gpg.key`, and that package is not in the
+  PikaOS package list, so the check warned on every real run. It now checks the
+  file, with the package as a fallback.
+- `dpkg --configure -a` now gets `--force-confdef --force-confold`, matching the
+  apt calls, so a half-configured package cannot prompt in `--yes` mode.
+
+### Added
+- `Makefile`, `tests/` and a GitHub Actions check workflow.
+- `tests/identity.sh` pins the `pika`/`pikaos` IDs and the keyring path.
+- README sections for verification and limits.
+
 ## [0.1.0] - 2026-10-30
 
 ### Added

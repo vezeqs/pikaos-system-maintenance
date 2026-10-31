@@ -21,7 +21,7 @@ sudo ./pikaos-system-maintenance.sh
 
 | # | Step | Command |
 |---|------|---------|
-| 1 | Check the PikaOS apt source and keyring | `/etc/apt/sources.list*`, `pika-keyring` |
+| 1 | Check the PikaOS apt source and keyring | `/etc/apt/sources.list*`, `/etc/apt/keyrings/pika-keyring.gpg.key` |
 | 2 | Refresh package lists (3 attempts) | `apt-get update` |
 | 3 | Show what would change | `apt-get -s full-upgrade`, `apt-get -s autoremove`, `flatpak remote-ls --updates` |
 | 4 | **Ask for confirmation** | `Proceed? [y/N]` |
@@ -40,8 +40,9 @@ Flatpak setup. This script adds three things the Debian script does not do:
 
 - **It checks that `pika-os.com` is in your apt sources** and warns if the
   system looks converted from plain Debian.
-- **It checks that `pika-keyring` is installed** and warns if apt may not be
-  able to verify PikaOS packages.
+- **It checks that the PikaOS keyring is present** at
+  `/etc/apt/keyrings/pika-keyring.gpg.key` (or that the `pika-keyring` package
+  is installed) and warns if apt may not be able to verify PikaOS packages.
 - **It updates Flatpak apps** after the apt upgrade, because PikaOS ships
   Flatpak as part of the desktop.
 
@@ -102,9 +103,32 @@ A real run against a `debian:sid` container, 7 packages behind:
 | `debian:sid` (the PikaOS base), 7 packages | Upgrade, autoremove and cache clean completed; no reboot required |
 
 The screenshot is from a plain Debian Sid container, not a PikaOS ISO. That is
-why it shows the "no pika-os.com entry" and "pika-keyring is not installed"
+why it shows the "no pika-os.com entry" and "PikaOS keyring is missing"
 warnings: those checks are supposed to pass on a real PikaOS install, and they
-warn rather than fail when they do not.
+warn rather than fail when they do not. PikaOS reports `ID=pika`; the script
+accepts both `pika` and `pikaos`.
+
+## Verify it yourself
+
+```bash
+make check
+```
+
+`make check` runs `bash -n`, shellcheck when installed, the smoke tests, the
+PikaOS identity/keyring regression test and the asset check. The screenshots
+come from a real `debian:sid` container:
+
+```bash
+podman run --rm -v "$PWD:/repo:ro,Z" debian:sid \
+  bash /repo/pikaos-system-maintenance.sh --dry-run
+```
+
+## Limits
+
+- It does not roll back. Take a snapshot first if you need one.
+- It does not switch kernels or schedulers; that is Pika Kernel Manager.
+- It does not replace Pikman, the graphical update manager.
+- It was tested on Debian Sid, the PikaOS base, not on a PikaOS ISO.
 
 ## License
 

@@ -70,9 +70,10 @@ fi
 if [[ -r /etc/os-release ]]; then
   # shellcheck disable=SC1091
   . /etc/os-release
-  if [[ ${ID:-} != pikaos ]]; then
-    warn "This does not look like PikaOS (ID=${ID:-unknown}), continuing anyway"
-  fi
+  case "${ID:-}" in
+    pika|pikaos) ;;
+    *) warn "This does not look like PikaOS (ID=${ID:-unknown}), continuing anyway" ;;
+  esac
 fi
 
 #banner
@@ -93,10 +94,10 @@ if grep -rqs 'pika-os.com' /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev
 else
   warn "==> No pika-os.com entry found in apt sources, the system may be a converted install"
 fi
-if dpkg-query -W -f='${Status}' pika-keyring 2>/dev/null | grep -q 'install ok installed'; then
-  ok "==> pika-keyring is installed"
+if [[ -f /etc/apt/keyrings/pika-keyring.gpg.key ]] || dpkg-query -W -f='${Status}' pika-keyring 2>/dev/null | grep -q 'install ok installed'; then
+  ok "==> PikaOS keyring is present"
 else
-  warn "==> pika-keyring is not installed, apt may fail to verify PikaOS packages"
+  warn "==> PikaOS keyring is missing (/etc/apt/keyrings/pika-keyring.gpg.key), apt may fail to verify PikaOS packages"
 fi
 
 info "==> Grabbing the new package lists"
@@ -154,7 +155,7 @@ fi
 
 #the updating part
 info "==> Fixing the dpkg state"
-run dpkg --configure -a
+run dpkg --force-confdef --force-confold --configure -a
 
 info "==> Fixing any broken files or packages"
 run apt-get "${APT_OPTS[@]}" --fix-broken install
